@@ -27,6 +27,7 @@
               "src/assets"
             ],
             "styles": [
+              "../node_modules/bootstrap/dist/css/bootstrap.css",
               "src/styles.scss"
             ],
             "scripts": [],
@@ -136,5 +137,10 @@
       }
     }
   },
-  "defaultProject": "statistics"
+  "defaultProject": "statistics",
+  "schematics": {
+    "@schematics/angular:component": {
+      "styleext": "scss"
+    }
+  }
 }
