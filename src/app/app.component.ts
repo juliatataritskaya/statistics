@@ -58,10 +58,11 @@ export class AppComponent implements OnInit {
   options: IBarChartOptions = {
     seriesBarDistance: 21,
     axisX: {
-      showGrid: false,
+      showGrid: false
     },
     axisY: {
       scaleMinSpace: 30,
+
     },
     height: 300
   };
@@ -81,10 +82,58 @@ export class AppComponent implements OnInit {
     }
   };
 
+  filterSource = [];
+  filtersettings = {
+    actions: false,
+    columns: {
+      id: {
+        title: 'ID',
+      },
+      name: {
+        title: 'Full Name',
+      },
+      date: {
+        title: 'Date',
+        filter: {
+          type: 'list',
+          config: {
+            selectText: 'Select...',
+            list: [
+              { value: 'Today', title: 'Today' },
+              { value: 'Yesterday', title: 'Yesterday' },
+              { value: 'Day before yesterday', title: 'Day before yesterday' },
+            ],
+          },
+        },
+      },
+    },
+    attr: {
+      class: "table table-responsive"
+    }
+  }
+
   ngOnInit() {
     this.statisticService.getStatistics().then((res) => {
       console.log(res);
     });
+    this.filterSource = [ {
+      id: 1, name: 'Test1', date: 'Today'
+    },
+      {
+        id: 2, name: 'Test2', date: 'Yesterday'
+      },
+      {
+        id: 3, name: 'Test3', date: 'Day before yesterday'
+      },
+      {
+        id: 4, name: 'Test4', date: 'Day before yesterday'
+      },
+      {
+        id: 5, name: 'Test5', date: 'Today'
+      },
+      {
+        id: 6, name: 'Test6', date: 'Today'
+      }];
   }
 
 }
