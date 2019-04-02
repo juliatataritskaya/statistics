@@ -1,10 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {
-  IBarChartOptions,
-  IChartistAnimationOptions,
-  IChartistData
-} from 'chartist';
-import {ChartEvent, ChartType} from 'ng-chartist';
 import {StatisticApiService} from './services/statistic.api.service';
 
 @Component({
@@ -14,46 +8,92 @@ import {StatisticApiService} from './services/statistic.api.service';
 })
 
 export class AppComponent implements OnInit {
-  firstDataStatistics = {x: [], y: []};
-  secondDataStatistics = {x: [], y: []};
+  firstDataStatistics = {x: [], y: [{ data: []}]};
+  secondDataStatistics = {x: [], y: [{ data: []}]};
 
   isFirstLoading = true;
   isSecondLoading = true;
 
-  constructor(private statisticService: StatisticApiService) {
-  }
-
-  type: ChartType = 'Bar';
-  firstDiagramData: IChartistData;
-
-  secondDiagramData: IChartistData;
-
-  options: IBarChartOptions = {
-    seriesBarDistance: 21,
-    axisX: {
-      showGrid: false
+  // barChart First
+  firstBarOptions: any = {
+    scaleShowVerticalLines: false,
+    responsive: true,
+    maintainAspectRatio: false,
+    legend: {
+      display: false
     },
-    axisY: {
-      scaleMinSpace: 30,
-
-    },
-    height: 300
-  };
-
-  events: ChartEvent = {
-    draw: (data) => {
-      if (data.type === 'bar') {
-        data.element.animate({
-          y2: <IChartistAnimationOptions> {
-            dur: '0.5s',
-            from: data.y1,
-            to: data.y2,
-            easing: 'easeOutQuad'
-          }
-        });
-      }
+    scales: {
+      yAxes: [{
+        ticks: {
+          beginAtZero: true
+        },
+        scaleLabel: {
+          labelString: 'Number of users',
+          display: true,
+          fontSize: 14
+        },
+      },
+      ],
+      xAxes: [{
+        scaleLabel: {
+          labelString: 'Number of lessons completed',
+          display: true,
+          fontSize: 14
+        },
+        barPercentage: 0.4
+      },
+      ]
     }
   };
+
+  // barChart Second
+  secondBarOptions: any = {
+    scaleShowVerticalLines: false,
+    responsive: true,
+    maintainAspectRatio: false,
+    legend: {
+      display: false
+    },
+    scales: {
+      yAxes: [{
+        ticks: {
+          beginAtZero: true,
+        },
+        scaleLabel: {
+          labelString: 'Number of users who completed this lesson',
+          display: true,
+          fontSize: 14
+        },
+      },
+      ],
+      xAxes: [{
+        scaleLabel: {
+          labelString: 'Lesson number',
+          display: true,
+          fontSize: 14
+        },
+        barPercentage: 0.4
+      },
+      ]
+    }
+  };
+
+  barChartType = 'bar';
+
+  barChartColors: Array<any> = [
+    {
+
+      backgroundColor: 'rgba(0, 157, 160, 0.8)',
+      borderColor: 'rgba(148,159,177,1)',
+      pointBackgroundColor: 'rgba(148,159,177,1)',
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: 'rgba(148,159,177,0.8)'
+    },
+
+  ];
+
+  constructor(private statisticService: StatisticApiService) { }
 
   filterSource = [];
   filtersettings = {
@@ -89,21 +129,21 @@ export class AppComponent implements OnInit {
     this.isFirstLoading = true;
     this.isSecondLoading = true;
     this.statisticService.getFirstStatistics().then((res) => {
-      console.log(res);
       res.forEach((el) => {
         this.firstDataStatistics.x.push(el.completedLessons);
-        this.firstDataStatistics.y.push(el.users);
+        this.firstDataStatistics.y[0].data.push(el.users);
       });
       this.setFirstData();
     });
+
     this.statisticService.getSecondStatistics().then((res) => {
       res.forEach((el) => {
         this.secondDataStatistics.x.push(el.lessonId);
-        this.secondDataStatistics.y.push(el.completedUsers);
+        this.secondDataStatistics.y[0].data.push(el.completedUsers);
       });
-
       this.setSecondData();
     });
+
     this.filterSource = [ {
       id: 1, name: 'Test1', date: 'Today'
     },
@@ -126,22 +166,9 @@ export class AppComponent implements OnInit {
 
   setFirstData() {
     this.isFirstLoading = false;
-    this.firstDiagramData = {
-      labels: this.firstDataStatistics.x,
-      series: [
-        this.firstDataStatistics.y
-      ]
-    };
   }
 
   setSecondData() {
     this.isSecondLoading = false;
-    this.secondDiagramData = {
-      labels: this.secondDataStatistics.x,
-      series: [
-        this.secondDataStatistics.y
-      ]
-    };
   }
-
 }

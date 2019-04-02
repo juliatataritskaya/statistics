@@ -1,10 +1,10 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { ChartistModule } from 'ng-chartist';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { StatisticApiService } from './services/statistic.api.service';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
+import { ChartsModule } from 'ng2-charts';
 
 @NgModule({
   declarations: [
@@ -12,9 +12,9 @@ import { Ng2SmartTableModule } from 'ng2-smart-table';
   ],
   imports: [
     BrowserModule,
-    ChartistModule,
     HttpClientModule,
-    Ng2SmartTableModule
+    Ng2SmartTableModule,
+    ChartsModule
   ],
   providers: [StatisticApiService],
   bootstrap: [AppComponent]

@@ -4,30 +4,28 @@
   </div>
   <div class="card row">
     <div class="card-header">
-      <h4 class="card-title">First chart</h4>
+      <h4 class="card-title">Number of users / number of lessons completed</h4>
     </div>
     <div class="card-body col-xs-12">
       <div *ngIf="isFirstLoading">Loading...</div>
-      <x-chartist
-        [type]="type"
-        [data]="firstDiagramData"
-        [options]="options"
-        [events]="events"
-      ></x-chartist>
+      <div *ngIf="!isFirstLoading">
+        <canvas baseChart height="400" class="chart" [datasets]="firstDataStatistics.y"
+                [labels]="firstDataStatistics.x" [options]="firstBarOptions" [colors]="barChartColors"
+                [chartType]="barChartType"></canvas>
+      </div>
     </div>
   </div>
   <div class="card row">
     <div class="card-header">
-      <h4 class="card-title">Second chart</h4>
+      <h4 class="card-title">Lesson number / number of users who completed this lesson </h4>
     </div>
     <div class="card-body col-xs-12">
       <div *ngIf="isSecondLoading">Loading...</div>
-      <x-chartist
-        [type]="type"
-        [data]="secondDiagramData"
-        [options]="options"
-        [events]="events"
-      ></x-chartist>
+      <div *ngIf="!isSecondLoading">
+        <canvas baseChart height="400" class="chart" [datasets]="secondDataStatistics.y"
+                [labels]="secondDataStatistics.x" [options]="secondBarOptions" [colors]="barChartColors"
+                [chartType]="barChartType"></canvas>
+      </div>
     </div>
   </div>
   <div class="card">
