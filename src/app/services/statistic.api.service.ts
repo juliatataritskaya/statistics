@@ -35,4 +35,15 @@ export class StatisticApiService extends BaseHttpService {
     });
   }
 
+  public getTableData(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.get(StatisticApiService.getTableDataStatisticsUrl, {})
+        .subscribe(result => {
+          resolve(result);
+        }, error => {
+          reject(error);
+        });
+    });
+  }
+
 }

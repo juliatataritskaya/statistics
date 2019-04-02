@@ -8,8 +8,8 @@ import {StatisticApiService} from './services/statistic.api.service';
 })
 
 export class AppComponent implements OnInit {
-  firstDataStatistics = {x: [], y: [{ data: []}]};
-  secondDataStatistics = {x: [], y: [{ data: []}]};
+  firstDataStatistics = {x: [], y: [{data: []}]};
+  secondDataStatistics = {x: [], y: [{data: []}]};
 
   isFirstLoading = true;
   isSecondLoading = true;
@@ -93,41 +93,58 @@ export class AppComponent implements OnInit {
 
   ];
 
-  constructor(private statisticService: StatisticApiService) { }
+  constructor(private statisticService: StatisticApiService) {
+  }
 
   filterSource = [];
   filtersettings = {
     actions: false,
     columns: {
-      id: {
+      userId: {
         title: 'ID',
       },
-      name: {
-        title: 'Full Name',
-      },
-      date: {
-        title: 'Date',
+      codeDay: {
+        valuePrepareFunction: (value) => {
+          let returnedValue = '';
+          if (value == '1') {
+            returnedValue = 'Today';
+          }
+          if (value == '2') {
+            returnedValue = 'Yesterday';
+          }
+          if (value == '3') {
+            returnedValue = 'Day before yesterday';
+          }
+          return returnedValue;
+        },
+        title: 'Day',
         filter: {
           type: 'list',
           config: {
             selectText: 'Select...',
             list: [
-              { value: 'Today', title: 'Today' },
-              { value: 'Yesterday', title: 'Yesterday' },
-              { value: 'Day before yesterday', title: 'Day before yesterday' },
-            ],
+              {value: '1', title: 'Today'},
+              {value: '2', title: 'Yesterday'},
+              {value: '3', title: 'Day before yesterday'},
+            ]
           },
         },
       },
     },
     attr: {
-      class: "table table-responsive"
+      class: 'table table-responsive'
     }
-  }
+  };
 
   ngOnInit() {
     this.isFirstLoading = true;
     this.isSecondLoading = true;
+    this.getFirstData();
+    this.getSecondData();
+    this.getTableData();
+  }
+
+  getFirstData() {
     this.statisticService.getFirstStatistics().then((res) => {
       res.forEach((el) => {
         this.firstDataStatistics.x.push(el.completedLessons);
@@ -135,7 +152,9 @@ export class AppComponent implements OnInit {
       });
       this.setFirstData();
     });
+  }
 
+  getSecondData() {
     this.statisticService.getSecondStatistics().then((res) => {
       res.forEach((el) => {
         this.secondDataStatistics.x.push(el.lessonId);
@@ -143,25 +162,12 @@ export class AppComponent implements OnInit {
       });
       this.setSecondData();
     });
+  }
 
-    this.filterSource = [ {
-      id: 1, name: 'Test1', date: 'Today'
-    },
-      {
-        id: 2, name: 'Test2', date: 'Yesterday'
-      },
-      {
-        id: 3, name: 'Test3', date: 'Day before yesterday'
-      },
-      {
-        id: 4, name: 'Test4', date: 'Day before yesterday'
-      },
-      {
-        id: 5, name: 'Test5', date: 'Today'
-      },
-      {
-        id: 6, name: 'Test6', date: 'Today'
-      }];
+  getTableData() {
+    this.statisticService.getTableData().then((res) => {
+      this.filterSource = res;
+    });
   }
 
   setFirstData() {
