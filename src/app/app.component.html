@@ -7,6 +7,7 @@
       <h4 class="card-title">First chart</h4>
     </div>
     <div class="card-body col-xs-12">
+      <div *ngIf="isFirstLoading">Loading...</div>
       <x-chartist
         [type]="type"
         [data]="firstDiagramData"
@@ -20,6 +21,7 @@
       <h4 class="card-title">Second chart</h4>
     </div>
     <div class="card-body col-xs-12">
+      <div *ngIf="isSecondLoading">Loading...</div>
       <x-chartist
         [type]="type"
         [data]="secondDiagramData"

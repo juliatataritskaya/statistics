@@ -14,46 +14,19 @@ import {StatisticApiService} from './services/statistic.api.service';
 })
 
 export class AppComponent implements OnInit {
+  firstDataStatistics = {x: [], y: []};
+  secondDataStatistics = {x: [], y: []};
+
+  isFirstLoading = true;
+  isSecondLoading = true;
 
   constructor(private statisticService: StatisticApiService) {
   }
 
   type: ChartType = 'Bar';
-  firstDiagramData: IChartistData = {
-    labels: [
-      '1',
-      '2',
-      '3',
-      '4',
-      '5',
-      '6',
-      '7',
-      '8',
-      '9',
-      '10',
-    ],
-    series: [
-      [1, 5, 10, 15, 20, 25, 30, 35, 40, 45]
-    ]
-  };
+  firstDiagramData: IChartistData;
 
-  secondDiagramData: IChartistData = {
-    labels: [
-      '1',
-      '2',
-      '3',
-      '4',
-      '5',
-      '6',
-      '7',
-      '8',
-      '9',
-      '10',
-    ],
-    series: [
-      [10, 5, 3, 2, 2, 1, 1, 1, 1, 0, 0]
-    ]
-  };
+  secondDiagramData: IChartistData;
 
   options: IBarChartOptions = {
     seriesBarDistance: 21,
@@ -113,8 +86,23 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.statisticService.getStatistics().then((res) => {
+    this.isFirstLoading = true;
+    this.isSecondLoading = true;
+    this.statisticService.getFirstStatistics().then((res) => {
       console.log(res);
+      res.forEach((el) => {
+        this.firstDataStatistics.x.push(el.completedLessons);
+        this.firstDataStatistics.y.push(el.users);
+      });
+      this.setFirstData();
+    });
+    this.statisticService.getSecondStatistics().then((res) => {
+      res.forEach((el) => {
+        this.secondDataStatistics.x.push(el.lessonId);
+        this.secondDataStatistics.y.push(el.completedUsers);
+      });
+
+      this.setSecondData();
     });
     this.filterSource = [ {
       id: 1, name: 'Test1', date: 'Today'
@@ -134,6 +122,26 @@ export class AppComponent implements OnInit {
       {
         id: 6, name: 'Test6', date: 'Today'
       }];
+  }
+
+  setFirstData() {
+    this.isFirstLoading = false;
+    this.firstDiagramData = {
+      labels: this.firstDataStatistics.x,
+      series: [
+        this.firstDataStatistics.y
+      ]
+    };
+  }
+
+  setSecondData() {
+    this.isSecondLoading = false;
+    this.secondDiagramData = {
+      labels: this.secondDataStatistics.x,
+      series: [
+        this.secondDataStatistics.y
+      ]
+    };
   }
 
 }

@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  serverUrl: ''
+  serverUrl: 'https://magic-numbers-math.herokuapp.com/api/v1/statistics'
 };
 
 /*
