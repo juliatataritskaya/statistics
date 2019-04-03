@@ -118,6 +118,7 @@ export class AppComponent implements OnInit {
           return returnedValue;
         },
         title: 'Day',
+        sortDirection: 'asc',
         filter: {
           type: 'list',
           config: {
